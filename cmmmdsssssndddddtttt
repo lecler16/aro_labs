@@ -1,0 +1,1 @@
+cd /afs/inf.ed.ac.uk/user/s28/s2856704/aro/lab && source aroenv/bin/activate && meshcat-server --zmq-url=tcp://127.0.0.1:6000 &
