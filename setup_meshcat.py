@@ -9,7 +9,6 @@ Created on Mon Sep  4 11:09:02 2023
 from utils.meshcat_viewer_wrapper import MeshcatVisualizer # the meshcat visualiser
 import sys
 from config import USE_MESHCAT, MESHCAT_URL, LEFT_HAND, RIGHT_HAND, CUBE_PLACEMENT_TARGET
-from tools import getcubeplacement
 
 
 FRAME_NAMES =  [LEFT_HAND+"frame",RIGHT_HAND+"frame", ]
@@ -32,6 +31,7 @@ def updaterobotframes(viz, robot):
         viz.applyConfiguration(framename,oMframe)
         
 def updatecubeframes(viz, cube):
+    from tools import getcubeplacement  # Import locally to avoid circular import
     for hookframename, framenamemeshcat in zip(hook_frames_names,hook_frames_names_meshcat):
         viz.applyConfiguration(framenamemeshcat,getcubeplacement(cube,hookframename))
 
@@ -41,7 +41,7 @@ def setupmeshcat(robot, url=MESHCAT_URL):
         #add target
         viz.addBox("target", [0.1,0.1,0.1],[0.,0.9,0.,0.5])
         viz.applyConfiguration('target', CUBE_PLACEMENT_TARGET)
-        viz.loadViewerModel()     
+        viz.loadViewerModel()
         viz.display(robot.q0)
         viz.displayCollisions(False)
         viz.displayVisuals(True)
