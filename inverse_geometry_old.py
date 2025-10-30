@@ -14,8 +14,6 @@ from config import LEFT_HOOK, RIGHT_HOOK, LEFT_HAND, RIGHT_HAND, EPSILON
 from config import CUBE_PLACEMENT, CUBE_PLACEMENT_TARGET
 
 import time
-from pinocchio.utils import rotate
-
 
 from tools import setcubeplacement
 
@@ -24,8 +22,13 @@ def computeqgrasppose(robot, qcurrent, cube, cubetarget, viz=None):
     setcubeplacement(robot, cube, cubetarget)
     
     # Get target poses for both hands using the cube's hook frames
+    # This is the generalized approach that works for any cube position/orientation
     left_target_pose = getcubeplacement(cube, LEFT_HOOK)   # Left hand target from cube's LEFT_HOOK frame
     right_target_pose = getcubeplacement(cube, RIGHT_HOOK) # Right hand target from cube's RIGHT_HOOK frame
+    
+    # print(f"Cube target position: {cubetarget.translation}")
+    # print(f"Left hand target: {left_target_pose.translation}")
+    # print(f"Right hand target: {right_target_pose.translation}")
     
     # Get frame IDs for both hands
     try:
@@ -177,24 +180,19 @@ def solve_dual_ik_3d(robot, left_target_pose, right_target_pose, left_frame_id, 
     
     # Return best solution found so far if it's reasonable
     print(f"Best error norm achieved: {best_error_norm:.4f}")
-    return best_q #if best_error_norm < tolerance * 5 else None
+    return best_q if best_error_norm < tolerance * 5 else None
 
     
 if __name__ == "__main__":
     from tools import setupwithmeshcat
     from setup_meshcat import updatevisuals
     robot, cube, viz = setupwithmeshcat()
-
+    
     q = robot.q0.copy()
     
-    # q0,successinit = computeqgrasppose(robot, q, cube, CUBE_PLACEMENT, viz)
-    # updatevisuals(viz, robot, cube, q0)
+    q0,successinit = computeqgrasppose(robot, q, cube, CUBE_PLACEMENT, viz)
+    updatevisuals(viz, robot, cube, q0)
 
     # qe,successend = computeqgrasppose(robot, q, cube, CUBE_PLACEMENT_TARGET,  viz)    
     # updatevisuals(viz, robot, cube, qe)
-
-    cube_placement_test = pin.SE3(rotate('z', 0.),np.array([0.33, 1.5, 0.93]))
-
-    qtest,successinit = computeqgrasppose(robot, q, cube, cube_placement_test, viz)
-    updatevisuals(viz, robot, cube, qtest)
 

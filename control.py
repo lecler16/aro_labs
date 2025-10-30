@@ -29,7 +29,7 @@ if __name__ == "__main__":
     
     
     from config import CUBE_PLACEMENT, CUBE_PLACEMENT_TARGET    
-    from inverse_geometry import computeqgrasppose
+    from inverse_geometry_old import computeqgrasppose
     from path import computepath
     
     q0,successinit = computeqgrasppose(robot, robot.q0, cube, CUBE_PLACEMENT, None)
