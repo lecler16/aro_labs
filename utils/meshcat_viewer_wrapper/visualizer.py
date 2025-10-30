@@ -39,22 +39,7 @@ class MeshcatVisualizer(PMV):
             if url == 'classical':
                 url = 'tcp://127.0.0.1:6000'
             print('Wrapper tries to connect to server <%s>' % url)
-            try:
-                import zmq
-                # Set a timeout for the connection
-                context = zmq.Context()
-                socket = context.socket(zmq.REQ)
-                socket.setsockopt(zmq.RCVTIMEO, 5000)  # 5 second timeout
-                socket.setsockopt(zmq.SNDTIMEO, 5000)  # 5 second timeout
-                socket.close()
-                context.term()
-                
-                server = meshcat.Visualizer(zmq_url=url)
-                print('Successfully connected to meshcat server')
-            except Exception as e:
-                print(f'Failed to connect to meshcat server: {e}')
-                print('Please make sure meshcat server is running with: meshcat-server --zmq-url=tcp://127.0.0.1:6000')
-                server = None
+            server = meshcat.Visualizer(zmq_url=url)
         else:
             server = None
 

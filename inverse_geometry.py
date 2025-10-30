@@ -19,7 +19,13 @@ def computeqgrasppose(robot, qcurrent, cube, cubetarget, viz=None):
     '''Return a collision free configuration grasping a cube at a specific location and a success flag'''
     setcubeplacement(robot, cube, cubetarget)
     #TODO implement
-    print ("TODO: implement me")
+
+
+    left_target_pose = getcubeplacement(cube, LEFT_HOOK)   # Left hand target from cube's LEFT_HOOK frame
+    right_target_pose = getcubeplacement(cube, RIGHT_HOOK) # Right hand target from cube's RIGHT_HOOK frame
+
+    
+
     return robot.q0, False
             
 if __name__ == "__main__":
